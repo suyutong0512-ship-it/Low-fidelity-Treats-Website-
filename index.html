@@ -28,7 +28,7 @@ function lines(n=3){return '<div class="skeleton" aria-label="'+esc(tt('skeleton
 function ph(t=''){return '<div class="ph" role="img" aria-label="'+esc(t)+'"></div>';}
 function route(id){if(N[id]?.page)return id;if(id==='p2')return 'p2-1';if(id==='p3')return 'p3-1';if(id==='p5')return 'p5-2';if(id==='p6')return 'p6-1';let up=id;while(up.includes('-')){up=up.slice(0,up.lastIndexOf('-'));if(N[up]?.page)return up;}return N[id]?.children.map(route).find(Boolean)||'p0'}
 function link(id,txt,cls=''){return '<a class="'+cls+'" href="#'+route(id)+'">'+esc(txt||N[id]?.title||id)+'</a>'}
-function branch(id,depth=0){let n=N[id];return link(id,n.title,depth?'sub':'group')+(depth<1?n.children.map(c=>branch(c,depth+1)).join(''):'')}
+function branch(id){return link(id,N[id].title,'group')}
 function buildNav(){$('#nav').innerHTML=DATA.nav.map(n=>'<details><summary>'+esc(n.label)+'</summary><div class="drop">'+(n.children.length?n.children.map(k=>branch(k)).join(''):link(n.id,tt('enter')+n.label))+'</div></details>').join('');document.querySelectorAll('#nav details').forEach(el=>el.addEventListener('toggle',()=>{if(el.open)document.querySelectorAll('#nav details').forEach(o=>{if(o!==el)o.open=false})}));}
 function card(id,img=false){let n=N[id];return '<a class="card" href="#'+route(id)+'"><span class="page-id">'+id+'</span>'+(img?ph(): '')+'<h3>'+esc(n.title)+'</h3>'+lines(2)+'<span class="arrow">→</span></a>'}
 function section(title,body){return '<section class="section"><div class="sectionhead"><h2>'+esc(title)+'</h2></div>'+body+'</section>'}
